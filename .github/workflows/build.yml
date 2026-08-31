@@ -41,14 +41,6 @@ jobs:
           -Pandroid.injected.signing.key.alias="${{secrets.KEY_ALIAS}}" \
           -Pandroid.injected.signing.key.password="${{secrets.KEY_PASSWORD}}"
 
-    - name: Build project (Google Play)
-      if: ${{ matrix.config.flavor == 'googlePlay' }}
-      run: |
-        ./gradlew app:bundleGooglePlayRelease -PdisableAbiSplits \
-          -Pandroid.injected.signing.store.file="$HOME/release.keystore" \
-          -Pandroid.injected.signing.store.password="${{secrets.KEYSTORE_PASSWORD}}" \
-          -Pandroid.injected.signing.key.alias="${{secrets.KEY_ALIAS}}" \
-          -Pandroid.injected.signing.key.password="${{secrets.KEY_PASSWORD}}"
 
     - name: Rename universal apk
       id: rename_apk_universal
@@ -109,13 +101,3 @@ jobs:
           ${{ steps.rename_apk_universal.outputs.path }}
           ${{ steps.rename_apk.outputs.path }}
           ${{ steps.rename_mappings.outputs.path }}
-
-
-    - name: Upload Google Play build
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-      if: ${{ matrix.config.flavor == 'googlePlay' }}
-      with:
-        name: geode-launcher-google-play
-        path: |
-          ${{ steps.rename_aab.outputs.path }}
-          ${{ steps.rename_aab_mappings.outputs.path }}
