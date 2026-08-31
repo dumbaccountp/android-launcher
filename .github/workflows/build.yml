@@ -14,14 +14,6 @@ jobs:
           lower: release
           flavor: standard
           
-        - name: Debug
-          lower: debug
-          flavor: standard
-
-        - name: Release
-          lower: release
-          flavor: googlePlay
-          
     runs-on: ubuntu-latest
 
     steps:
@@ -118,14 +110,6 @@ jobs:
           ${{ steps.rename_apk.outputs.path }}
           ${{ steps.rename_mappings.outputs.path }}
 
-    - name: Upload debug build
-      uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-      if: ${{ matrix.config.flavor == 'standard' && matrix.config.lower == 'debug' }}
-      with:
-        name: geode-launcher-${{ matrix.config.lower }}
-        path: |
-          ${{ steps.rename_apk_universal.outputs.path }}
-          ${{ steps.rename_apk.outputs.path }}
 
     - name: Upload Google Play build
       uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
